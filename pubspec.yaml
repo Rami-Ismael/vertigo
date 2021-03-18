@@ -37,7 +37,6 @@ dependencies:
   esys_flutter_share:
   firebase_core:
   firebase_ml_vision:
-  permission_handler:
 
 dev_dependencies:
   flutter_test:

@@ -1,68 +1,39 @@
 {
-  "project_info": {
-    "project_number": "922606658398",
-    "project_id": "good-92acd",
-    "storage_bucket": "good-92acd.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:922606658398:android:ad3f1420745145381425cf",
-        "android_client_info": {
-          "package_name": "com.example.cameraforflutter"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "922606658398-3piup52itpajrfam28lpeqa1t51rterm.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDlwoxLCnsy_A9EWlLtoQVcOqSn8aF3Cb0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "922606658398-3piup52itpajrfam28lpeqa1t51rterm.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
+    "project_info": {
+      "project_number": "780304359483",
+      "project_id": "vertigo-56ec1",
+      "storage_bucket": "vertigo-56ec1.appspot.com"
     },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:922606658398:android:417a2289f61dda081425cf",
-        "android_client_info": {
-          "package_name": "com.example.vertigo"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "922606658398-3piup52itpajrfam28lpeqa1t51rterm.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDlwoxLCnsy_A9EWlLtoQVcOqSn8aF3Cb0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "922606658398-3piup52itpajrfam28lpeqa1t51rterm.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:780304359483:android:b842f1a04c75167c7fbc1e",
+          "android_client_info": {
+            "package_name": "com.example.vertigo"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "780304359483-lijq6e8hia43cc1k3cf4ofan21mh5u2l.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyCR9IjOYMNl4InCV4YGTvKDDlzsKADuYu8"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "780304359483-lijq6e8hia43cc1k3cf4ofan21mh5u2l.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
         }
       }
-    }
-  ],
-  "configuration_version": "1"
-}
+    ],
+    "configuration_version": "1"
+  }
