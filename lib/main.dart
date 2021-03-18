@@ -1,8 +1,12 @@
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
-import "flutterMlkit.dart";
+import 'FacePageState.dart';
 
 void main() {
-  runApp(MyApp());
+  //print("rami");
+ // print(FacePageState());
+  runApp(FacePageState());
+
 }
 
 class MyApp extends StatelessWidget {
