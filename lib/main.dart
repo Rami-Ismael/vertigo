@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:vertigo/TakePictureScreen.dart';
 import 'FacePageState.dart';
 import 'dart:async';
 
@@ -7,16 +8,28 @@ import 'package:vertigo/FirstRoute.dart';
 import 'FacePageState.dart';
 import 'video.dart';
 
-void main() {
+Future<void> main() async {
+  // Ensure that plugin services are initialized so that `availableCameras()`
+  // can be called before `runApp()`
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+
+  // Get a specific camera from the list of available cameras.
+  final firstCamera = cameras.first;
+  print(firstCamera.runtimeType);
   //print("rami");
  // print(FacePageState());
   /**runApp(MaterialApp(
       home:FirstRoute()));*/
-  runApp(MyApp());
+  runApp(MyApp(firstCamera));
 
 }
 
 class MyApp extends StatelessWidget {
+  MyApp(this.cameraDescription);
+  final CameraDescription cameraDescription;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -25,14 +38,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Demo Home Page',cameraDescription: cameraDescription,),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title,this.cameraDescription}) : super(key: key);
   final String title;
+  final CameraDescription cameraDescription;
 
  /** @override
   _MyHomePageState createState() => _MyHomePageState();*/
@@ -46,7 +60,10 @@ class MyHomePage extends StatelessWidget {
             children: [
               IconButton(icon: Icon(Icons.menu), onPressed: () {}),
               Spacer(),
-              IconButton(icon: Icon(Icons.camera_alt_outlined), onPressed: () {}),
+              IconButton(icon: Icon(Icons.camera_alt_outlined), onPressed: () {
+                  //navigate to the second butotn
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> TakePictureScreen(camera: cameraDescription)));
+              }),
             ],
         )
       ),
