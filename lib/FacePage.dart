@@ -5,67 +5,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class FacePageState extends StatefulWidget {
-  File _imageFile;
-  List<Face> _faces;
+class FacePage extends StatefulWidget {
 
-  // var imageFromCamera = null;
-  //to access the camera
-  final picker = ImagePicker();
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return WTFScaffold();
-  }
-
-  /**
-   * Selected an Image
-   * Load image for processing
-   * Perform Face Detection
-   */
-  void getImageAndDetectFaces() async {
-    //PickedFile imageFromCamera;
-    final imageFromCamera = await picker.getImage(source: ImageSource.camera);
-    print(imageFromCamera.runtimeType);
-    //convert a pIckedFile object to File object
-    File imageFile = File(imageFromCamera.path);
-    //use the firebase
-    final image = FirebaseVisionImage.fromFile(imageFile);
-    final faceDetector = FirebaseVision.instance
-        .faceDetector(FaceDetectorOptions(mode: FaceDetectorMode.accurate));
-    final faces = await faceDetector.processImage(image);
-    setState(() {
-      _imageFile = imageFile;
-      _faces = faces;
-    });
-    print(faces);
-  }
 
   //StatefulWidget createState() =>ImagesAndFaces(imageFile: _imageFile,faces: _faces,);
 
-  void setState(Null Function() param0) {}
 
   @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
-  }
-
-// print(imageForCamera.toString())
-//print(imagefromCamera.runtimeType);
-//  var selected = Image.file(File(imageFromCamera));
-//final selected = Image.file(File(imageFromCamera));
-//File select = File(imageFromCamera.);
-//final image = FirebaseVisionImage.fromFile(select);
+  State<StatefulWidget> createState() => _FacePageState();
 }
 
-class FacePage {}
+
 
 /**
  * this will hold the faces
  */
-class ImagesAndFaces extends StatefulWidget {
+class ImagesAndFaces extends StatelessWidget {
   ImagesAndFaces({this.imageFile, this.faces});
 
   final File imageFile;
@@ -77,27 +32,26 @@ class ImagesAndFaces extends StatefulWidget {
       children: <Widget>[
         Flexible(
             child: Container(
-          child: Image.file(imageFile),
+              child: Image.file(imageFile),)),
+        Flexible(child: ListView(
+          children: faces.map<Widget>((e) => FaceCoordinate(e)).toList(),
         ))
       ],
     );
   }
 
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
-  }
+
 }
 
-class WTFScaffold extends StatelessWidget {
+class ImageScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text("WTF"),
+        title: Text("Image Scaffold"),
       ),
+      body: Container(),
       floatingActionButton: cameraFloatingActionButton(),
     );
   }
@@ -108,26 +62,12 @@ class cameraFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
         onPressed: () async {
-          FacePageState().getImageAndDetectFaces();
+          _FacePageState().getImageAndDetectFaces();
         },
         child: Icon(Icons.camera_alt_rounded));
   }
 }
 
-class fireVision extends StatefulWidget {
-  //use firevision
-  //final image = FirebaseVisionImage.fromFile(getImageAndDetectFaces())
-
-  final faceDetector = FirebaseVision.instance.faceDetector(FaceDetectorOptions(
-    mode: FaceDetectorMode.accurate,
-  ));
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
-  }
-}
 //https://developers.google.com/android/reference/com/google/mlkit/vision/face/Face
 class FaceCoordinate extends StatelessWidget{
   FaceCoordinate(this.face);
@@ -136,10 +76,54 @@ class FaceCoordinate extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     final pos = face.boundingBox;
+    print((' (${pos.top}, ${pos.left}), (${pos.bottom}, ${pos.right})'));
     return ListTile(
       title: Text(
           (' (${pos.top}, ${pos.left}), (${pos.bottom}, ${pos.right})')
       ),
     );
   }
+}
+class _FacePageState extends State<FacePage>{
+  File _imageFile;
+  List<Face> _faces;
+
+  // var imageFromCamera = null;
+  //to access the camera
+  final picker = ImagePicker();
+  /**
+   * Selected an Image
+   * Load image for processing
+   * Perform Face Detection
+   */
+  void getImageAndDetectFaces() async {
+    //PickedFile imageFromCamera;
+    final imageFromCamera = await picker.getImage(source: ImageSource.camera);
+    print(imageFromCamera.runtimeType);
+    //convert a pckedFile object to File object
+    File imageFile = File(imageFromCamera.path);
+    print("imageFile");
+    print(imageFile);
+    //use the firebase
+    final image = FirebaseVisionImage.fromFile(imageFile);
+    print("image");
+    print(image);
+    final faceDetector = FirebaseVision.instance
+        .faceDetector(FaceDetectorOptions(mode: FaceDetectorMode.accurate));
+    final faces = await faceDetector.processImage(image);
+    if(mounted){
+        setState(() {
+        _imageFile = imageFile;
+        _faces = faces;
+        }
+    );}
+    ImagesAndFaces(imageFile: _imageFile,faces:_faces);
+    _faces.forEach((element) {print(element.toString());});
+  }
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return ImageScaffold();
+  }
+  
 }
