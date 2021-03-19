@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,7 +56,7 @@ class ImageScaffold extends StatelessWidget {
         title: Text("Image Scaffold"),
       ),
       body: Container(),
-      floatingActionButton: cameraFloatingActionButton(),
+      //floatingActionButton: cameraFloatingActionButton(),
     );
   }
 }
@@ -66,7 +66,7 @@ class cameraFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
         onPressed: () async {
-          _FacePageState().getImageAndDetectFaces();
+            _FacePageState().getImageAndDetectFaces();
         },
         child: Icon(Icons.camera_alt_rounded));
   }
@@ -125,30 +125,46 @@ class _FacePageState extends State<FacePage>{
     super.dispose();
   }
   void getImageAndDetectFaces() async {
-    //PickedFile imageFromCamera;
-    final imageFromCamera = await picker.getImage(source: ImageSource.camera);
-    //final image = await
-    print("imageFromCamera");
-    print(imageFromCamera.runtimeType);
-    //convert a pckedFile object to File object
-    File imageFile = File(imageFromCamera.path);
-    print("imageFile");
-    print(imageFile);
-    //use the firebase
-    final image = FirebaseVisionImage.fromFile(imageFile);
-    print("image");
-    print(image);
-    final faceDetector = FirebaseVision.instance
-        .faceDetector(FaceDetectorOptions(mode: FaceDetectorMode.accurate));
-    final faces = await faceDetector.processImage(image);
-    if(mounted){
+    try {
+        initState();
+      // Ensure that the camera is initialized.
+      await _initializeControllerFuture;
+      //PickedFile imageFromCamera;
+     // final imageFromCamera = await picker.getImage(source: ImageSource.camera);
+      // Attempt to take a picture and get the file `image`
+      // where it was saved.
+      final imageFromCamera = await _controller.takePicture();
+      //final image = await
+      print("imageFromCamera");
+      print(imageFromCamera.runtimeType);
+      //convert a pckedFile object to File object
+      File imageFile = File(imageFromCamera.path);
+      print("imageFile");
+      print(imageFile);
+      //use the firebase
+      final image = FirebaseVisionImage.fromFile(imageFile);
+      print("image");
+      print(image);
+      final faceDetector = FirebaseVision.instance .faceDetector(FaceDetectorOptions(mode: FaceDetectorMode.accurate));
+      final faces = await faceDetector.processImage(image);
+      print("asdfsa");
+      print(faces[0].boundingBox.right);
+      if (mounted) {
         setState(() {
-        _imageFile = imageFile;
-        _faces = faces;
+          _imageFile = imageFile;
+          _faces = faces;
+          print("asdfsa");
+          print(faces[0].boundingBox.right);
         }
-    );}
-    ImagesAndFaces(imageFile: _imageFile,faces:_faces);
-    _faces.forEach((element) {print(element.toString());});
+        );
+      }
+      ImagesAndFaces(imageFile: _imageFile, faces: _faces);
+      _faces.forEach((element) {
+        print(element.toString());
+      });
+    } catch (e) {
+      print(e);
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -168,7 +184,55 @@ class _FacePageState extends State<FacePage>{
           return Center(child: CircularProgressIndicator());
         }
       }),
-      floatingActionButton: cameraFloatingActionButton(),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            try {
+              //initState();
+              // Ensure that the camera is initialized.
+              await _initializeControllerFuture;
+              //PickedFile imageFromCamera;
+              // final imageFromCamera = await picker.getImage(source: ImageSource.camera);
+              // Attempt to take a picture and get the file `image`
+              // where it was saved.
+              final imageFromCamera = await _controller.takePicture();
+              //final image = await
+              print("imageFromCamera");
+              print(imageFromCamera);
+              print(imageFromCamera.runtimeType);
+              //convert a pckedFile object to File object
+              File imageFile = File(imageFromCamera.path);
+              print("imageFile");
+              print(imageFile);
+              print(imageFile.runtimeType);
+              print(imageFile.path);
+              //use the firebase
+              final image = FirebaseVisionImage.fromFilePath(imageFile.path);
+              print("image fghdfghdh");
+              print(image.toString());
+              final faceDetector = FirebaseVision.instance
+                  .faceDetector(FaceDetectorOptions(mode: FaceDetectorMode.accurate));
+              print(faceDetector);
+              final faces =  await faceDetector.processImage(image);
+              print("faces Faces");
+              print(faces[0].boundingBox.right);
+              print(faces);
+              if (mounted) {
+                setState(() {
+                  print("rami");
+                  _imageFile = imageFile;
+                  print("rami1");
+                  print(faces);
+                  _faces = faces;
+                  print(_faces);
+                }
+                );
+              }
+              ImagesAndFaces(imageFile: _imageFile, faces: _faces);
+            } catch (e) {
+              print(e);
+            }
+          },
+          child: Icon(Icons.camera_alt_rounded))
     );
   }
   
