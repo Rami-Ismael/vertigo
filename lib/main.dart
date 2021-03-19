@@ -1,11 +1,11 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:vertigo/TakePictureScreen.dart';
-import 'FacePageState.dart';
+import 'FacePage.dart';
 import 'dart:async';
 
 import 'package:vertigo/FirstRoute.dart';
-import 'FacePageState.dart';
+import 'FacePage.dart';
 import 'video.dart';
 
 Future<void> main() async {
@@ -67,8 +67,8 @@ class MyHomePage extends StatelessWidget {
             ],
         )
       ),
-      floatingActionButton: FloatingActionButton(child: Icon(Icons.add), onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>FacePageState()));
+      floatingActionButton: FloatingActionButton(child: Icon(Icons.face), onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>FacePage()));
       }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 

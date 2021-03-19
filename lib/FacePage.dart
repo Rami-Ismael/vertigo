@@ -1,21 +1,22 @@
-
 import 'dart:io';
+
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class FacePageState extends  StatefulWidget{
+class FacePageState extends StatefulWidget {
   File _imageFile;
   List<Face> _faces;
+
   // var imageFromCamera = null;
   //to access the camera
   final picker = ImagePicker();
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return MaterialApp(home: WTFScaffold());
-
+    return WTFScaffold();
   }
 
   /**
@@ -28,20 +29,16 @@ class FacePageState extends  StatefulWidget{
     final imageFromCamera = await picker.getImage(source: ImageSource.camera);
     print(imageFromCamera.runtimeType);
     //convert a pIckedFile object to File object
-    File imageFile  = File(imageFromCamera.path);
+    File imageFile = File(imageFromCamera.path);
     //use the firebase
-     final image = FirebaseVisionImage.fromFile(imageFile);
-     final faceDetector = FirebaseVision.instance.faceDetector(
-       FaceDetectorOptions(
-         mode: FaceDetectorMode.accurate
-       )
-     );
+    final image = FirebaseVisionImage.fromFile(imageFile);
+    final faceDetector = FirebaseVision.instance
+        .faceDetector(FaceDetectorOptions(mode: FaceDetectorMode.accurate));
     final faces = await faceDetector.processImage(image);
     setState(() {
-    _imageFile = imageFile;
-    _faces = faces;
-    }
-    );
+      _imageFile = imageFile;
+      _faces = faces;
+    });
     print(faces);
   }
 
@@ -55,7 +52,6 @@ class FacePageState extends  StatefulWidget{
     throw UnimplementedError();
   }
 
-
 // print(imageForCamera.toString())
 //print(imagefromCamera.runtimeType);
 //  var selected = Image.file(File(imageFromCamera));
@@ -64,20 +60,25 @@ class FacePageState extends  StatefulWidget{
 //final image = FirebaseVisionImage.fromFile(select);
 }
 
-class FacePage {
-}
+class FacePage {}
+
 /**
  * this will hold the faces
  */
 class ImagesAndFaces extends StatefulWidget {
-  ImagesAndFaces({this.imageFile,this.faces});
+  ImagesAndFaces({this.imageFile, this.faces});
+
   final File imageFile;
   final List<Face> faces;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Flexible(child: Container( child: Image.file(imageFile),))
+        Flexible(
+            child: Container(
+          child: Image.file(imageFile),
+        ))
       ],
     );
   }
@@ -87,9 +88,9 @@ class ImagesAndFaces extends StatefulWidget {
     // TODO: implement createState
     throw UnimplementedError();
   }
-
 }
-class WTFScaffold extends StatelessWidget{
+
+class WTFScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -100,29 +101,45 @@ class WTFScaffold extends StatelessWidget{
       floatingActionButton: cameraFloatingActionButton(),
     );
   }
-
 }
-class cameraFloatingActionButton extends StatelessWidget{
+
+class cameraFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-      return FloatingActionButton(onPressed: () async {FacePageState().getImageAndDetectFaces();},
-      child: Icon(Icons.camera_alt_rounded));
+    return FloatingActionButton(
+        onPressed: () async {
+          FacePageState().getImageAndDetectFaces();
+        },
+        child: Icon(Icons.camera_alt_rounded));
   }
-
 }
+
 class fireVision extends StatefulWidget {
   //use firevision
   //final image = FirebaseVisionImage.fromFile(getImageAndDetectFaces())
 
-  final faceDetector = FirebaseVision.instance.faceDetector(
-    FaceDetectorOptions(
-      mode:  FaceDetectorMode.accurate,
-    )
-  );
+  final faceDetector = FirebaseVision.instance.faceDetector(FaceDetectorOptions(
+    mode: FaceDetectorMode.accurate,
+  ));
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     throw UnimplementedError();
   }
+}
+//https://developers.google.com/android/reference/com/google/mlkit/vision/face/Face
+class FaceCoordinate extends StatelessWidget{
+  FaceCoordinate(this.face);
+  final Face face;
 
+  @override
+  Widget build(BuildContext context) {
+    final pos = face.boundingBox;
+    return ListTile(
+      title: Text(
+          (' (${pos.top}, ${pos.left}), (${pos.bottom}, ${pos.right})')
+      ),
+    );
+  }
 }
