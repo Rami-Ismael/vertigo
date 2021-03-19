@@ -15,6 +15,7 @@ class FacePageState extends  StatefulWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(home: WTFScaffold());
+
   }
 
   /**
@@ -48,6 +49,12 @@ class FacePageState extends  StatefulWidget{
 
   void setState(Null Function() param0) {}
 
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
+  }
+
 
 // print(imageForCamera.toString())
 //print(imagefromCamera.runtimeType);
@@ -73,6 +80,12 @@ class ImagesAndFaces extends StatefulWidget {
         Flexible(child: Container( child: Image.file(imageFile),))
       ],
     );
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
   }
 
 }
