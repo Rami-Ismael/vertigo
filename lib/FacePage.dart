@@ -173,7 +173,8 @@ class _FacePageState extends State<FacePage>{
       appBar: AppBar(
         title: Text("Image Scaffold2.0"),
       ),
-      body: FutureBuilder<void>(
+      body:
+          FutureBuilder<void>(
       future: _initializeControllerFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
