@@ -78,10 +78,10 @@ class TakePictureScreenState extends State<TakePictureScreen>  {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.camera_alt_outlined),
-    onPressed: () async {
+        onPressed: () async {
     // Take the Picture in a try / catch block. If anything goes wrong,
     // catch the error.
-    try {
+       try {
     // Ensure that the camera is initialized.
     await _initializeControllerFuture;
 

@@ -11,10 +11,14 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
-  runApp(FacePageState());
+  //runApp(FacePageState());
 }
+class FacePage extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() => _FacePageState();
 
-class FacePageState extends StatelessWidget {
+}
+class _FacePageState extends State<FacePage>{
   File imageFile;
   List<Face> faces;
   // var imageFromCamera = null;
@@ -45,4 +49,19 @@ class FacePageState extends StatelessWidget {
   //final selected = Image.file(File(imageFromCamera));
   //File select = File(imageFromCamera.);
   //final image = FirebaseVisionImage.fromFile(select);
+}
+//https://developers.google.com/android/reference/com/google/mlkit/vision/face/Face
+class FaceCoordinate extends StatelessWidget{
+    FaceCoordinate(this.face);
+    final Face face;
+
+  @override
+  Widget build(BuildContext context) {
+      final pos = face.boundingBox;
+      return ListTile(
+        title: Text(
+            (' (${pos.top}, ${pos.left}), (${pos.bottom}, ${pos.right})')
+        ),
+      );
+  }
 }
