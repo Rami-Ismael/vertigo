@@ -67,7 +67,9 @@ class MyHomePage extends StatelessWidget {
             ],
         )
       ),
-      floatingActionButton: FloatingActionButton(child: Icon(Icons.add), onPressed: () {}),
+      floatingActionButton: FloatingActionButton(child: Icon(Icons.add), onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>FacePageState()));
+      }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
     );
