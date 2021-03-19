@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:vertigo/TakePictureScreen.dart';
 import 'FacePageState.dart';
 import 'dart:async';
@@ -27,6 +28,16 @@ Future<void> main() async {
       ,)
     ,);*/
   runApp(FacePageState());
+=======
+import 'package:vertigo/FirstRoute.dart';
+import 'FacePageState.dart';
+import 'video.dart';
+
+void main() {
+  //print("rami");
+ // print(FacePageState());
+  runApp(MaterialApp(home:FirstRoute()));
+>>>>>>> main
 
 }
 
