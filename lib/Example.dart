@@ -1,6 +1,9 @@
 
 //Global variable for storing the lost of camera avaailable
+import 'dart:async';
+
 import 'package:camera/camera.dart';
+import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -37,6 +40,11 @@ class _CameraScreenState extends State<CameraScreen> {
       }
       setState(() {});
     });
+  }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
   Future<String> _takePicture() async {
 
@@ -141,12 +149,70 @@ class _DetailScreenState extends State<DetailScreen> {
   String recognizedText = "Loading ...";
 
   void _initializeVision() async {
-    // TODO: Initialize the text recognizer here
+    //recognizing the image and gettig the required data from it.
+    //Retrieve the image file from the path , cand called getImageSize()
+    final File imageFile = File(path);
+
+    if (imageFile != null) {
+      await _getImageSize(imageFile);
+    }
+    //Create a FirebaseVisionIMage object and a TextREcognizer Object
+    final FirebaseVisionImage visionImage =
+    FirebaseVisionImage.fromFile(imageFile);
+
+    final TextRecognizer textRecognizer =
+    FirebaseVision.instance.textRecognizer();
+
+    //REtrive teh VisionText object by processing the visionImage
+    final VisionText visionText =  await textRecognizer.processImage(visionImage);
+    //vision Text and then serpate out the email address from it The text are presetni n blockes =, lines -> text
+    // Regular expression for verifying an email address
+    String pattern =
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$";
+    RegExp regEx = RegExp(pattern);
+
+    String mailAddress = "";
+
+    for (TextBlock block in visionText.blocks) {
+      for (TextLine line in block.lines) {
+        // Checking if the line contains an email address
+        if (regEx.hasMatch(line.text)) {
+          mailAddress += line.text + '\n';
+        }
+      }
+    }
+    //Store the retreived text in teh recognizedText Varaible
+    if (this.mounted) {
+      setState(() {
+        recognizedText = mailAddress;
+      });
+    }
+
+
   }
 
   Future<void> _getImageSize(File imageFile) async {
-    // TODO: Retrieve the image size here
+    final Completer<Size> completer = Completer<Size>();
+
+    // Fetching image from path
+    final Image image = Image.file(imageFile);
+
+    // Retrieving its size
+    image.image.resolve(const ImageConfiguration()).addListener(
+      ImageStreamListener((ImageInfo info, bool _) {
+        completer.complete(Size(
+          info.image.width.toDouble(),
+          info.image.height.toDouble(),
+        ));
+      }),
+    );
+
+    final Size imageSize = await completer.future;
+    setState(() {
+      _imageSize = imageSize;
+    });
   }
+
 
   @override
   void initState() {
