@@ -149,7 +149,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Size _imageSize;
   String recognizedText = "Loading ...";
-
+  List<TextElement> _elements = [];
   void _initializeVision() async {
     //recognizing the image and gettig the required data from it.
     //Retrieve the image file from the path , cand called getImageSize()
@@ -181,6 +181,9 @@ class _DetailScreenState extends State<DetailScreen> {
         // Checking if the line contains an email address
         if (regEx.hasMatch(line.text)) {
           mailAddress += line.text + '\n';
+          for (TextElement element in line.elements){
+            _elements.add(element);
+          }
         }
       }
     }
@@ -287,4 +290,21 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
     );
   }
+}
+class TextDetectorPainter extends CustomPainter {
+  TextDetectorPainter(this.absoluteImageSize, this.elements);
+
+  final Size absoluteImageSize;
+  final List<TextElement> elements;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // TODO: Define painter
+  }
+
+  @override
+  bool shouldRepaint(TextDetectorPainter oldDelegate) {
+    return true;
+  }
+
 }
