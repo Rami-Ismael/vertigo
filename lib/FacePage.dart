@@ -137,11 +137,8 @@ class _FacePageState extends State<FacePage> {
     File imageFile = File(imageFromCamera.path);
     //use the firebase
     final image = FirebaseVisionImage.fromFilePath(imageFile.path);
-    print("image fghdfghdh");
-    print(image.toString());
     final faceDetector = FirebaseVision.instance
         .faceDetector(FaceDetectorOptions(mode: FaceDetectorMode.accurate));
-    print(faceDetector);
     final faces = await faceDetector.processImage(image);
     if (mounted) {
       setState(() {
