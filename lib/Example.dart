@@ -83,12 +83,46 @@ class _CameraScreenState extends State<CameraScreen> {
 
     return imagePath;
   }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ML Vision Example'),
+        title: Text('ML Vision'),
       ),
-      body: Container(),
+      body: _controller.value.isInitialized
+          ? Stack(
+        children: <Widget>[
+          CameraPreview(_controller),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              child: RaisedButton.icon(
+                icon: Icon(Icons.camera),
+                label: Text("Click"),
+                onPressed: () async {
+                  await _takePicture().then((String path) {
+                    if (path != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailScreen(path),
+                        ),
+                      );
+                    }
+                  });
+                },
+              ),
+            ),
+          )
+        ],
+      )
+          : Container(
+        color: Colors.black,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
     );
   }
 }
