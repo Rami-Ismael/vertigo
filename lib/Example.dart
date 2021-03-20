@@ -24,6 +24,7 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
+
   CameraController _controller;
   @override
   @override
@@ -77,17 +78,17 @@ class _CameraScreenState extends State<CameraScreen> {
       print("Processing is in progress...");
       return null;
     }
-
+    final image = await _controller.takePicture();
     try {
       // Captures the image and saves it to the
       // provided path
-      await _controller.takePicture();
+       // image = await _controller.takePicture();
     } on CameraException catch (e) {
       print("Camera Exception: $e");
       return null;
     }
 
-    return imagePath;
+    return image.path;
   }
   @override
   Widget build(BuildContext context) {
@@ -109,6 +110,7 @@ class _CameraScreenState extends State<CameraScreen> {
                 onPressed: () async {
                   await _takePicture().then((String path) {
                     if (path != null) {
+                      print(path);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -164,7 +166,8 @@ class _DetailScreenState extends State<DetailScreen> {
     FirebaseVision.instance.textRecognizer();
 
     //REtrive teh VisionText object by processing the visionImage
-    final VisionText visionText =  await textRecognizer.processImage(visionImage);
+    final VisionText visionText = await textRecognizer.processImage(
+        visionImage);
     //vision Text and then serpate out the email address from it The text are presetni n blockes =, lines -> text
     // Regular expression for verifying an email address
     String pattern =
@@ -187,8 +190,6 @@ class _DetailScreenState extends State<DetailScreen> {
         recognizedText = mailAddress;
       });
     }
-
-
   }
 
   Future<void> _getImageSize(File imageFile) async {
@@ -226,7 +227,64 @@ class _DetailScreenState extends State<DetailScreen> {
       appBar: AppBar(
         title: Text("Image Details"),
       ),
-      body: Container(),
+      body: _imageSize != null
+          ? Stack(
+        children: <Widget>[
+          Center(
+            child: Container(
+              width: double.maxFinite,
+              color: Colors.black,
+              child: AspectRatio(
+                aspectRatio: _imageSize.aspectRatio,
+                child: Image.file(
+                  File(path),
+                ),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Card(
+              elevation: 8,
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "Identified emails",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 60,
+                      child: SingleChildScrollView(
+                        child: Text(
+                          recognizedText,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      )
+          : Container(
+        color: Colors.black,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
     );
   }
 }
