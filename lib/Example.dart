@@ -237,11 +237,14 @@ class _DetailScreenState extends State<DetailScreen> {
             child: Container(
               width: double.maxFinite,
               color: Colors.black,
-              child: AspectRatio(
+              child: CustomPaint(
+                foregroundPainter: TextDetectorPainter(_imageSize,_elements),
+                child:AspectRatio(
                 aspectRatio: _imageSize.aspectRatio,
                 child: Image.file(
                   File(path),
                 ),
+              ),
               ),
             ),
           ),
@@ -296,15 +299,35 @@ class TextDetectorPainter extends CustomPainter {
 
   final Size absoluteImageSize;
   final List<TextElement> elements;
+  var scaleX =1;
+  var scaleY =1;
 
+  Rect scaleRect(TextContainer container) {
+    return Rect.fromLTRB(
+      container.boundingBox.left * scaleX,
+      container.boundingBox.top * scaleY,
+      container.boundingBox.right * scaleX,
+      container.boundingBox.bottom * scaleY,
+    );
+  }
   @override
   void paint(Canvas canvas, Size size) {
     // TODO: Define painter
+    final double scaleX = size.width / absoluteImageSize.width;
+    final double scaleY = size.height / absoluteImageSize.height;
+    final Paint paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..color = Colors.red
+      ..strokeWidth = 2.0;
+    for (TextElement element in elements) {
+      canvas.drawRect(scaleRect(element), paint);
+    }
   }
 
   @override
   bool shouldRepaint(TextDetectorPainter oldDelegate) {
     return true;
   }
+
 
 }
