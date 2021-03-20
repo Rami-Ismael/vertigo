@@ -58,7 +58,9 @@ class MyHomePage extends StatelessWidget {
       bottomNavigationBar: BottomAppBar(
           child: Row(
             children: [
-              IconButton(icon: Icon(Icons.menu), onPressed: () {}),
+              IconButton(icon: Icon(Icons.directions_car_rounded), onPressed: () {
+
+              }),
               Spacer(),
               IconButton(icon: Icon(Icons.camera_alt_outlined), onPressed: () {
                   //navigate to the second butotn
