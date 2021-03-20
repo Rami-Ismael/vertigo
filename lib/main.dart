@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:vertigo/TakePictureScreen.dart';
 import 'FacePage.dart';
 import 'dart:async';
-
+import 'Example.dart';
 import 'package:vertigo/FirstRoute.dart';
 import 'video.dart';
-import 'FaceDetection.dart';
-
+CameraDescription camera;
 Future<void> main() async {
   // Ensure that plugin services are initialized so that `availableCameras()`
   // can be called before `runApp()`
@@ -18,6 +17,7 @@ Future<void> main() async {
 
   // Get a specific camera from the list of available cameras.
   final firstCamera = cameras.first;
+  camera = cameras.first;
   print(firstCamera.runtimeType);
   //print("rami");
   // print(FacePageState());
@@ -27,6 +27,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  //constructor
   MyApp(this.cameraDescription);
   final CameraDescription cameraDescription;
   // This widget is the root of your application.
@@ -59,12 +60,14 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
           child: Row(
-        children: [
-          IconButton(
-              icon: Icon(Icons.airplanemode_active),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => FacDec()));
+            children: [
+              IconButton(icon: Icon(Icons.directions_car_rounded), onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> CameraScreen(camera: camera)));
+              }),
+              Spacer(),
+              IconButton(icon: Icon(Icons.camera_alt_outlined), onPressed: () {
+                  //navigate to the second butotn
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> TakePictureScreen(camera: cameraDescription)));
               }),
           Spacer(),
           IconButton(
