@@ -6,33 +6,31 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:vertigo/main.dart';
 // Global variable for storing the list of
 // cameras available
 // ignore: non_constant_identifier_names
-CameraDescription Camera;
 
 // ignore: must_be_immutable
 class CameraScreen extends StatefulWidget {
   final CameraDescription camera;
 
   const CameraScreen({Key key, this.camera}) : super(key: key);
-  Example (CameraDescription cameraDescription){
-    Camera = this.camera;
-  }
   @override
   _CameraScreenState createState() => _CameraScreenState();
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  // Inside _CameraScreenState class
-
   CameraController _controller;
   @override
   @override
+  /**
+   * initState is called once and only once. It must also call super.initState().
+   */
   void initState() {
     super.initState();
 
-    _controller = CameraController(Camera, ResolutionPreset.high);
+    _controller = CameraController(widget.camera, ResolutionPreset.high);
     _controller.initialize().then((_) {
       if (!mounted) {
         return;
@@ -97,7 +95,7 @@ class _CameraScreenState extends State<CameraScreen> {
             padding: const EdgeInsets.all(20.0),
             child: Container(
               alignment: Alignment.bottomCenter,
-              child: RaisedButton.icon(
+              child: ElevatedButton.icon(
                 icon: Icon(Icons.camera),
                 label: Text("Click"),
                 onPressed: () async {
@@ -126,4 +124,43 @@ class _CameraScreenState extends State<CameraScreen> {
     );
   }
 }
+class DetailScreen extends StatefulWidget {
+  final String imagePath;
+  DetailScreen(this.imagePath);
 
+  @override
+  _DetailScreenState createState() => new _DetailScreenState(imagePath);
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  _DetailScreenState(this.path);
+
+  final String path;
+
+  Size _imageSize;
+  String recognizedText = "Loading ...";
+
+  void _initializeVision() async {
+    // TODO: Initialize the text recognizer here
+  }
+
+  Future<void> _getImageSize(File imageFile) async {
+    // TODO: Retrieve the image size here
+  }
+
+  @override
+  void initState() {
+    _initializeVision();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Image Details"),
+      ),
+      body: Container(),
+    );
+  }
+}
