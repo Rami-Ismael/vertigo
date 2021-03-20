@@ -1,12 +1,12 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:vertigo/TakePictureScreen.dart';
-import 'FacePageState.dart';
+import 'FacePage.dart';
 import 'dart:async';
 
 import 'package:vertigo/FirstRoute.dart';
-import 'FacePageState.dart';
 import 'video.dart';
+import 'FaceDetection.dart';
 
 Future<void> main() async {
   // Ensure that plugin services are initialized so that `availableCameras()`
@@ -20,11 +20,10 @@ Future<void> main() async {
   final firstCamera = cameras.first;
   print(firstCamera.runtimeType);
   //print("rami");
- // print(FacePageState());
+  // print(FacePageState());
   /**runApp(MaterialApp(
       home:FirstRoute()));*/
   runApp(MyApp(firstCamera));
-
 }
 
 class MyApp extends StatelessWidget {
@@ -38,17 +37,20 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page',cameraDescription: cameraDescription,),
+      home: MyHomePage(
+        title: 'Flutter Demo Home Page',
+        cameraDescription: cameraDescription,
+      ),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({Key key, this.title,this.cameraDescription}) : super(key: key);
+  MyHomePage({Key key, this.title, this.cameraDescription}) : super(key: key);
   final String title;
   final CameraDescription cameraDescription;
 
- /** @override
+  /** @override
   _MyHomePageState createState() => _MyHomePageState();*/
 
   @override
@@ -57,20 +59,35 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
           child: Row(
-            children: [
-              IconButton(icon: Icon(Icons.menu), onPressed: () {}),
-              Spacer(),
-              IconButton(icon: Icon(Icons.camera_alt_outlined), onPressed: () {
-                  //navigate to the second butotn
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> TakePictureScreen(camera: cameraDescription)));
+        children: [
+          IconButton(
+              icon: Icon(Icons.airplanemode_active),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FacDec()));
               }),
-            ],
-        )
-      ),
-      floatingActionButton: FloatingActionButton(child: Icon(Icons.add), onPressed: () {}),
+          Spacer(),
+          IconButton(
+              icon: Icon(Icons.camera_alt_outlined),
+              onPressed: () {
+                //navigate to the second butotn
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            TakePictureScreen(camera: cameraDescription)));
+              }),
+        ],
+      )),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.face),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => FacePage(camera: cameraDescription)));
+          }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
     );
   }
 }
-
