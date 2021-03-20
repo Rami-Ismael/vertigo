@@ -61,7 +61,7 @@ class MyHomePage extends StatelessWidget {
           child: Row(
             children: [
               IconButton(icon: Icon(Icons.directions_car_rounded), onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Example(camera)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> CameraScreen(camera: camera)));
               }),
               Spacer(),
               IconButton(icon: Icon(Icons.camera_alt_outlined), onPressed: () {

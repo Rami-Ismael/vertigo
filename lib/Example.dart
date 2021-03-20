@@ -2,32 +2,94 @@
 //Global variable for storing the lost of camera avaailable
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 // Global variable for storing the list of
 // cameras available
+// ignore: non_constant_identifier_names
 CameraDescription Camera;
-class  Example extends StatelessWidget{
-    CameraDescription camera;
-   Example (CameraDescription cameraDescription){
-    this.camera = cameraDescription;
+
+// ignore: must_be_immutable
+class CameraScreen extends StatefulWidget {
+  final CameraDescription camera;
+
+  const CameraScreen({Key key, this.camera}) : super(key: key);
+  Example (CameraDescription cameraDescription){
     Camera = this.camera;
   }
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return CameraScreen();
-  }
-  
-}
-
-class CameraScreen extends StatefulWidget {
   @override
   _CameraScreenState createState() => _CameraScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen>{
+class _CameraScreenState extends State<CameraScreen> {
+  // Inside _CameraScreenState class
+
+  CameraController _controller;
   @override
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = CameraController(Camera, ResolutionPreset.high);
+    _controller.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    });
+  }
+  Future<String> _takePicture() async {
+
+    // Checking whether the controller is initialized
+    if (!_controller.value.isInitialized) {
+      print("Controller is not initialized");
+      return null;
+    }
+
+    // Formatting Date and Time
+    String dateTime = DateFormat.yMMMd()
+        .addPattern('-')
+        .add_Hms()
+        .format(DateTime.now())
+        .toString();
+
+    String formattedDateTime = dateTime.replaceAll(' ', '');
+    print("Formatted: $formattedDateTime");
+
+    // Retrieving the path for saving an image
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
+    final String visionDir = '${appDocDir.path}/Photos/Vision\ Images';
+    await Directory(visionDir).create(recursive: true);
+    final String imagePath = '$visionDir/image_$formattedDateTime.jpg';
+
+    // Checking whether the picture is being taken
+    // to prevent execution of the function again
+    // if previous execution has not ended
+    if (_controller.value.isTakingPicture) {
+      print("Processing is in progress...");
+      return null;
+    }
+
+    try {
+      // Captures the image and saves it to the
+      // provided path
+      await _controller.takePicture();
+    } on CameraException catch (e) {
+      print("Camera Exception: $e");
+      return null;
+    }
+
+    return imagePath;
+  }
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('ML Vision Example'),
+      ),
+      body: Container(),
+    );
   }
 }
+
