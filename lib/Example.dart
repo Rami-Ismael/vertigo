@@ -1,4 +1,4 @@
-
+//https://blog.codemagic.io/text-recognition-using-firebase-ml-kit-flutter/
 //Global variable for storing the lost of camera avaailable
 import 'dart:async';
 
@@ -150,6 +150,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Size _imageSize;
   String recognizedText = "Loading ...";
   List<TextElement> _elements = [];
+  Face faceDetected = null;
   void _initializeVision() async {
     //recognizing the image and gettig the required data from it.
     //Retrieve the image file from the path , cand called getImageSize()
@@ -294,6 +295,7 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 }
+
 class TextDetectorPainter extends CustomPainter {
   TextDetectorPainter(this.absoluteImageSize, this.elements);
 

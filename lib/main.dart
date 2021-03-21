@@ -1,11 +1,13 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:vertigo/ExampleWithFace.dart';
 import 'package:vertigo/TakePictureScreen.dart';
 import 'FacePage.dart';
 import 'dart:async';
 import 'Example.dart';
 import 'package:vertigo/FirstRoute.dart';
 import 'video.dart';
+
 CameraDescription camera;
 Future<void> main() async {
   // Ensure that plugin services are initialized so that `availableCameras()`
@@ -60,14 +62,14 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: BottomAppBar(
           child: Row(
-            children: [
-              IconButton(icon: Icon(Icons.directions_car_rounded), onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> CameraScreen(camera: camera)));
-              }),
-              Spacer(),
-              IconButton(icon: Icon(Icons.camera_alt_outlined), onPressed: () {
-                  //navigate to the second butotn
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> TakePictureScreen(camera: cameraDescription)));
+        children: [
+          IconButton(
+              icon: Icon(Icons.directions_car_rounded),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CameraScreen(camera: camera)));
               }),
           Spacer(),
           IconButton(
@@ -79,6 +81,18 @@ class MyHomePage extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) =>
                             TakePictureScreen(camera: cameraDescription)));
+              }),
+          Spacer(),
+          Spacer(),
+          IconButton(
+              icon: Icon(Icons.face_retouching_natural),
+              onPressed: () {
+                //navigate to the second butotn
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ExampleWithFace(camera: cameraDescription)));
               }),
         ],
       )),
